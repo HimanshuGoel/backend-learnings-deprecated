@@ -1,12 +1,23 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-// lib/app.ts
-const express = require("express");
-// Create a new express application instance
-const app = express();
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-});
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
-});
+const express_1 = __importDefault(require("express"));
+const body_parser_1 = __importDefault(require("body-parser"));
+const books_route_1 = require("./routes/books.route");
+class App {
+    constructor() {
+        this.booksRoute = new books_route_1.Books();
+        this.app = (0, express_1.default)();
+        this.config();
+        this.booksRoute.routes(this.app);
+    }
+    config() {
+        this.app.use(body_parser_1.default.json());
+        this.app.use(body_parser_1.default.urlencoded({
+            extended: false
+        }));
+    }
+}
+exports.default = new App().app;

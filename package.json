@@ -9,7 +9,8 @@
     "dev": "npx ts-node-dev --respawn --transpile-only ./src/server.ts",
     "dev-debug": "npx ts-node-dev --respawn --transpile-only --debug ./src/server.ts",
     "lint": "tslint -c tslint.json 'src/**/*.ts'",
-    "prod": "tsc && node ./build/app.js",
+    "prod": "npm run lint && tsc && node ./build/app.js",
+    "build": "npm run lint && tsc",
     "test": "jest src"
   },
   "jest": {
