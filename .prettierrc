@@ -2,5 +2,7 @@
   "printWidth": 100,
   "singleQuote": true,
   "trailingComma": "none",
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "useTabs": false,
+  "tabWidth": 2
 }
