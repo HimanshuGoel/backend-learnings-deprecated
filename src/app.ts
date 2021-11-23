@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
 
@@ -17,6 +18,7 @@ class App {
   }
 
   private config(): void {
+    this.app.use(cors());
     this.app.use(bodyParser.json());
     this.app.use(
       bodyParser.urlencoded({
