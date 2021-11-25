@@ -4,6 +4,8 @@ import bodyParser from 'body-parser';
 
 import { Books } from './routes/books.route';
 import { Health } from './routes/health.route';
+import favicon from 'serve-favicon';
+import * as path from 'path';
 
 class App {
   public app: express.Application;
@@ -20,6 +22,8 @@ class App {
   private config(): void {
     this.app.use(cors());
     this.app.use(bodyParser.json());
+    this.app.use(favicon(path.join(__dirname, '../node-js.png')));
+
     this.app.use(
       bodyParser.urlencoded({
         extended: false
