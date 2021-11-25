@@ -106,3 +106,8 @@ documentation/**/*.generated.md
 /.scannerwork
 /.angulardoc.json
 mocks/db.json
+
+# Environments file
+# don't check in  env files
+.env.prod
+.env.staging
