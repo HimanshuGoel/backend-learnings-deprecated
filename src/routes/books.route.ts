@@ -1,34 +1,91 @@
-import { Request, Response, Router } from 'express';
+import { Request, Response, Application, NextFunction } from 'express';
 
 import { getBooks } from '../utilities/mock-data.utility';
+import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
-export class Books {
-  private books = getBooks();
+import BaseApiRoute from './base-api.route';
 
-  public routes(app: Router): void {
-    app.route('/books').get((req: Request, res: Response) => {
-      res.status(200).send(this.books);
-    });
+export class BooksRoute extends BaseApiRoute {
+  constructor(express: Application) {
+    super();
+    this.register(express);
+  }
 
-    app.route('/books/:id').get((req: Request, res: Response) => {
+  public register(app: Application): void {
+    app.use('/api', this.router);
+
+    this.router.get('/books', this.getBooks);
+    this.router.get('/books/:id', this.getBookById);
+    this.router.post('/books/:id', this.createBookById);
+    this.router.put('/books/:id', this.updateBookById);
+    this.router.delete('/books/:id', this.deleteBookById);
+  }
+
+  private getBooks(req: Request, res: Response, next: NextFunction) {
+    try {
+      const response = getBooks();
+      res.status(StatusCodes.OK).send({
+        status: ReasonPhrases.OK,
+        data: response
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  private getBookById(req: Request, res: Response, next: NextFunction) {
+    try {
+      const books = getBooks();
       const id = Number(req.params.id);
+      const response = books.find((book) => book.id === id);
+      res.status(StatusCodes.OK).send({
+        status: ReasonPhrases.OK,
+        data: response
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 
-      const selectedBook = this.books.find((book) => book.id === id);
-      res.status(200).send(selectedBook);
-    });
-
-    app.route('/books/:id').post((req: Request, res: Response) => {
+  private createBookById(req: Request, res: Response, next: NextFunction) {
+    try {
       // Create a new book
       const name = req.body.name;
-      const attack = req.body.attack;
-    });
+      const author = req.body.author;
+      res.status(StatusCodes.CREATED).send({
+        status: ReasonPhrases.CREATED,
+        data: {}
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 
-    app.route('/books/:id').put((req: Request, res: Response) => {
+  private updateBookById(req: Request, res: Response, next: NextFunction) {
+    try {
       // Update a particular book
-    });
+      const name = req.body.name;
+      const author = req.body.author;
+      res.status(StatusCodes.OK).send({
+        status: ReasonPhrases.OK,
+        data: {}
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 
-    app.route('/books/:id').delete((req: Request, res: Response) => {
+  private deleteBookById(req: Request, res: Response, next: NextFunction) {
+    try {
       // Delete a particular book
-    });
+      const name = req.body.name;
+      const author = req.body.author;
+      res.status(StatusCodes.NO_CONTENT).send({
+        status: ReasonPhrases.NO_CONTENT,
+        data: {}
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 }

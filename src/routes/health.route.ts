@@ -1,47 +1,34 @@
-import { NextFunction, Request, Response, Router } from 'express';
-import * as os from 'os';
-import * as process from 'process';
+import { Application, NextFunction, Request, Response } from 'express';
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
+import os from 'os';
+import process from 'process';
+
 import { version } from '../../package.json';
+
+import BaseApiRoute from './base-api.route';
 import ApiError from '../abstractions/api-error';
 
-export class Health {
-  public routes(app: Router): void {
-    app
-      .route('/health')
-      .get((req: Request, res: Response, next: NextFunction) =>
-        this.getServerHealth(req, res, next)
-      );
+export class HealthRoute extends BaseApiRoute {
+  constructor(express: Application) {
+    super();
+    this.register(express);
+  }
 
-    app
-      .route('/system')
-      .get((req: Request, res: Response, next: NextFunction) => this.getSystemInfo(req, res, next));
+  public register(app: Application): void {
+    app.use('/api/status', this.router);
 
-    app
-      .route('/time')
-      .get((req: Request, res: Response, next: NextFunction) => this.getServerTime(req, res, next));
-
-    app
-      .route('/usage')
-      .get((req: Request, res: Response, next: NextFunction) =>
-        this.getResourceUsage(req, res, next)
-      );
-
-    app
-      .route('/process')
-      .get((req: Request, res: Response, next: NextFunction) =>
-        this.getProcessInfo(req, res, next)
-      );
-
-    app
-      .route('/error')
-      .get((req: Request, res: Response, next: NextFunction) => this.getError(req, res, next));
+    this.router.get('/health', this.getServerHealth);
+    this.router.get('/system', this.getSystemInfo);
+    this.router.get('/time', this.getServerTime);
+    this.router.get('/usage', this.getResourceUsage);
+    this.router.get('/process', this.getProcessInfo);
+    this.router.get('/error', this.getError);
   }
 
   private getServerHealth(req: Request, res: Response, next: NextFunction) {
     try {
-      res.status(200).send({
+      res.status(StatusCodes.OK).send({
         status: ReasonPhrases.OK,
         version: version
       });
@@ -64,7 +51,7 @@ export class Health {
         currentUser: os.userInfo()
       };
 
-      res.status(200).send({
+      res.status(StatusCodes.OK).send({
         data: response
       });
     } catch (error) {
@@ -80,7 +67,7 @@ export class Health {
         utc,
         date: now
       };
-      res.status(200).send({
+      res.status(StatusCodes.OK).send({
         data: time
       });
     } catch (error) {
@@ -105,7 +92,7 @@ export class Health {
         systemCpu: os.cpus()
       };
 
-      res.status(200).send({
+      res.status(StatusCodes.OK).send({
         data: response
       });
     } catch (error) {
@@ -124,7 +111,7 @@ export class Health {
         applicationVersion: process.version,
         nodeDependencyVersions: process.versions
       };
-      res.status(200).send({
+      res.status(StatusCodes.OK).send({
         data: response
       });
     } catch (error) {

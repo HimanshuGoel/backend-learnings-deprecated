@@ -1,6 +1,7 @@
-import * as express from 'express';
-import * as util from 'util';
 import { StatusCodes } from 'http-status-codes';
+
+import express from 'express';
+import util from 'util';
 
 import ApiError from '../abstractions/api-error';
 
