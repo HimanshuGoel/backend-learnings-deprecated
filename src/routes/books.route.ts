@@ -1,7 +1,7 @@
 import { Request, Response, Application, NextFunction } from 'express';
 
-import { getBooks } from '../utilities/mock-data.utility';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+import { getBooks } from '../utilities/mock-data.utility';
 
 import BaseApiRoute from './base-api.route';
 
@@ -50,8 +50,10 @@ export class BooksRoute extends BaseApiRoute {
   private createBookById(req: Request, res: Response, next: NextFunction) {
     try {
       // Create a new book
-      const name = req.body.name;
-      const author = req.body.author;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { name } = req.body;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { author } = req.body;
       res.status(StatusCodes.CREATED).send({
         status: ReasonPhrases.CREATED,
         data: {}
@@ -64,8 +66,10 @@ export class BooksRoute extends BaseApiRoute {
   private updateBookById(req: Request, res: Response, next: NextFunction) {
     try {
       // Update a particular book
-      const name = req.body.name;
-      const author = req.body.author;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { name } = req.body;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { author } = req.body;
       res.status(StatusCodes.OK).send({
         status: ReasonPhrases.OK,
         data: {}
@@ -78,8 +82,10 @@ export class BooksRoute extends BaseApiRoute {
   private deleteBookById(req: Request, res: Response, next: NextFunction) {
     try {
       // Delete a particular book
-      const name = req.body.name;
-      const author = req.body.author;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { name } = req.body;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { author } = req.body;
       res.status(StatusCodes.NO_CONTENT).send({
         status: ReasonPhrases.NO_CONTENT,
         data: {}
@@ -89,3 +95,5 @@ export class BooksRoute extends BaseApiRoute {
     }
   }
 }
+
+export default BooksRoute;

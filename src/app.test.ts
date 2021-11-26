@@ -10,6 +10,6 @@ test('should return Base Path', (done) => {
       if (err) {
         return done(err);
       }
-      done();
+      return done();
     });
 });

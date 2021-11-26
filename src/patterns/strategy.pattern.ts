@@ -1,3 +1,7 @@
+/* eslint max-classes-per-file: 0 */
+
+import Logger from '../utilities/logger.utility';
+
 type Payment = {
   clientId: string;
   amount: number;
@@ -15,11 +19,12 @@ class CreditCardPayment implements PaymentMethod {
   }
 
   charge(): Payment {
-    console.log('Charging payment with credit card');
+    Logger.log('Charging payment with credit card');
     return this.payment;
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class DebitCardPayment implements PaymentMethod {
   payment: Payment;
 
@@ -28,12 +33,12 @@ class DebitCardPayment implements PaymentMethod {
   }
 
   charge(): Payment {
-    console.log('Charging payment with debit card');
+    Logger.log('Charging payment with debit card');
     return this.payment;
   }
 }
 
-class paymentStrategy {
+class PaymentStrategy {
   strategy: PaymentMethod;
 
   constructor(strategy: PaymentMethod) {
@@ -45,10 +50,11 @@ class paymentStrategy {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 class Main {
-  static run() {
+  public static run() {
     const creditCardPayment = new CreditCardPayment({ clientId: '123', amount: 100 });
-    const payment = new paymentStrategy(creditCardPayment);
+    const payment = new PaymentStrategy(creditCardPayment);
     payment.charge();
   }
 }

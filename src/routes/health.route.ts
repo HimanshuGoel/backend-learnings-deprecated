@@ -9,7 +9,7 @@ import { version } from '../../package.json';
 import BaseApiRoute from './base-api.route';
 import ApiError from '../abstractions/api-error';
 
-export class HealthRoute extends BaseApiRoute {
+export default class HealthRoute extends BaseApiRoute {
   constructor(express: Application) {
     super();
     this.register(express);
@@ -30,7 +30,7 @@ export class HealthRoute extends BaseApiRoute {
     try {
       res.status(StatusCodes.OK).send({
         status: ReasonPhrases.OK,
-        version: version
+        version
       });
     } catch (error) {
       next(error);
@@ -41,7 +41,7 @@ export class HealthRoute extends BaseApiRoute {
     try {
       const response = {
         cpus: os.cpus(),
-        network: os.networkInterfaces() as any,
+        network: os.networkInterfaces(),
         os: {
           platform: process.platform,
           version: os.release(),

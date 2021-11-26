@@ -4,11 +4,14 @@ export const payGrades = {
   high: '3'
 } as const;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type t = typeof payGrades;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type payGradeType = keyof t; // 'low' | 'average' | 'high'
 type payValueType = t[keyof t]; // '1' | '2' | '3'
 
-const hisPay: payValueType = '3'; //okay
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const hisPay: payValueType = '3'; // okay
 // const myPay: payValueType = '4'; // error
 
 // Tech module constants
@@ -27,4 +30,5 @@ export const AdminStaffPayGrades = {
 
 // import both constants file
 type allPayGrades = typeof TechStaffPayGrades | typeof AdminStaffPayGrades;
-type allPayValues = allPayGrades[keyof allPayGrades]; //"T1" | "T2" | "T3" | "A1" | "A2" | "A3"
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type allPayValues = allPayGrades[keyof allPayGrades]; // "T1" | "T2" | "T3" | "A1" | "A2" | "A3"

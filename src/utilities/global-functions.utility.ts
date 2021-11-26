@@ -1,1 +1,5 @@
-export function dummyMethod() {}
+export function dummyMethod() {
+  return null;
+}
+
+export default dummyMethod;

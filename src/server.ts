@@ -1,14 +1,15 @@
 import app from './app';
+import Logger from './utilities/logger.utility';
 
 const PORT = process.env.PORT || 3000;
 
 process.on('unhandledRejection', (reason: Error) => {
-  console.error('Unhandled Promise Rejection: reason:', reason.message);
-  console.error(reason.stack);
+  Logger.error('Unhandled Promise Rejection: reason:', reason.message);
+  Logger.error(reason.stack);
 });
 
 app.listen(PORT, () => {
-  console.log('listening on port ' + PORT);
+  Logger.log(`listening on port ${PORT}`);
 });
 
 export default app;

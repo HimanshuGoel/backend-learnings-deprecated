@@ -11,7 +11,9 @@ export interface IError {
 
 class ApiError extends Error implements IError {
   public status = 500;
+
   public success = false;
+
   public fields!: { name: { message: string } };
 
   constructor(msg: string, statusCode: number, name: string = 'ApiError') {
