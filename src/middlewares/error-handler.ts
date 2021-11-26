@@ -30,7 +30,7 @@ const addErrorHandler = (
       stack: ''
     };
 
-    body.stack = err.stack;
+    body.stack = err.stack || '';
 
     res.status(status).json(body);
   }

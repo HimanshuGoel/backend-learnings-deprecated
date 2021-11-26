@@ -8,8 +8,8 @@ process.on('unhandledRejection', (reason: Error) => {
   Logger.error(reason.stack);
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   Logger.log(`listening on port ${PORT}`);
 });
 
-export default app;
+export default server;

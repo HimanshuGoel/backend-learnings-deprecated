@@ -9,7 +9,7 @@ import { version } from '../../package.json';
 import BaseApiRoute from './base-api.route';
 import ApiError from '../abstractions/api-error';
 
-export default class HealthRoute extends BaseApiRoute {
+export class HealthRoute extends BaseApiRoute {
   constructor(express: Application) {
     super();
     this.register(express);
@@ -127,3 +127,5 @@ export default class HealthRoute extends BaseApiRoute {
     }
   }
 }
+
+export default HealthRoute;
