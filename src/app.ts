@@ -25,7 +25,7 @@ class App {
   private config(): void {
     this.app.use(cors());
     this.app.use(bodyParser.json());
-    // this.app.use(favicon(path.join(__dirname, '../favicon.png')));
+    this.app.use(favicon(path.join(__dirname, '../favicon.png')));
     this.app.use(cors());
     this.app.use(express.json({ limit: '100mb' }));
     this.app.use(addErrorHandler);
