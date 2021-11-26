@@ -2,35 +2,26 @@
 
 This project contains backend learnings and best practices acquired from different web resources and self-experiences.
 
-## Purpose
-
 It provides standard initial structure and code examples for different topics which can be referred in a real-time project.
 
 This will also serve as a playground for working upon different proof-of-concepts.
 
-## Common Features
-
-- Initial project structure
-- Based on Typescript language
-- Different patterns like Strategy, etc.
-- Simple environment configuration
-- Global environment object
-- Request/Response encryption & decryption implementation
-- Easily add new feature
-- Unit & Integration test cases
-
 ## Running Development Mode
 
 - Install the dependencies `npm install`
-- Start the application `npm start`
+- Start the server `npm run dev`
 
 ## Running Production Mode
 
 - Install the dependencies `npm install`
 - Create the build `npm run build`
-- Start the application `npm run start:production`
+- Start the server `npm run prod`
 
-## Default System Health Status API
+Currently, this application has been deployed on `Heroku` server at below endpoint -
+
+<https://hg-backend-learnings-deploy.herokuapp.com/>
+
+## Server Health API
 
 - `${host}/api/status/system` - Return the system information in response
 - `${host}/api/status/time` - Return the current time in response
@@ -39,6 +30,8 @@ This will also serve as a playground for working upon different proof-of-concept
 - `${host}/api/status/error` - Return the error generated object in response
 
 ## Best Practices
+
+- `[To Be Created]`
 
 ## Get In Touch
 

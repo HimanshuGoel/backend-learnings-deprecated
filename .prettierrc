@@ -1,30 +1,8 @@
 {
-  "bracketSpacing": true,
-  "printWidth": 80,
-  "proseWrap": "preserve",
-  "semi": true,
+  "printWidth": 100,
   "singleQuote": true,
   "trailingComma": "none",
   "tabWidth": 2,
   "useTabs": false,
-  "parser": "typescript",
-  "arrowParens": "always",
-  "requirePragma": true,
-  "insertPragma": true,
-  "endOfLine": "auto",
-  "overrides": [
-    {
-      "files": "*.json",
-      "options": {
-        "singleQuote": false
-      }
-    },
-    {
-      "files": ".*rc",
-      "options": {
-        "singleQuote": false,
-        "parser": "json"
-      }
-    }
-  ]
+  "endOfLine": "auto"
 }

@@ -1,9 +1,9 @@
 {
-    "cSpell.words": [
-        "Goel",
-        "Himanshu",
-        "respawn",
-        "rootdir",
-        "Starships"
-    ]
+  "cSpell.words": ["camelcase", "Goel", "Himanshu", "respawn", "rootdir", "Starships"],
+  "editor.tabSize": 2,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
