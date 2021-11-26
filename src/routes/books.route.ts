@@ -1,19 +1,16 @@
 import { Request, Response, Router } from 'express';
 
+import { getBooks } from '../utilities/mock-data.utility';
+
 export class Books {
-  private books = [
-    { id: 1, name: 'The Lord of the Rings' },
-    { id: 2, name: 'The Hobbit' }
-  ];
+  private books = getBooks();
 
   public routes(app: Router): void {
-    // Received the express instance from app.ts file
     app.route('/books').get((req: Request, res: Response) => {
       res.status(200).send(this.books);
     });
 
     app.route('/books/:id').get((req: Request, res: Response) => {
-      // Show info about a specific book
       const id = Number(req.params.id);
 
       const selectedBook = this.books.find((book) => book.id === id);
@@ -21,17 +18,17 @@ export class Books {
     });
 
     app.route('/books/:id').post((req: Request, res: Response) => {
-      // Create a new book, then redirect somewhere
+      // Create a new book
       const name = req.body.name;
       const attack = req.body.attack;
     });
 
     app.route('/books/:id').put((req: Request, res: Response) => {
-      // Update a particular book and redirect somewhere
+      // Update a particular book
     });
 
     app.route('/books/:id').delete((req: Request, res: Response) => {
-      // Delete a particular book and redirect somewhere
+      // Delete a particular book
     });
   }
 }

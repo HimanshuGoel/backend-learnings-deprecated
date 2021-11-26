@@ -2,13 +2,16 @@ import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
 
+import * as path from 'path';
+import favicon from 'serve-favicon';
+
 import { Books } from './routes/books.route';
 import { Health } from './routes/health.route';
-import favicon from 'serve-favicon';
-import * as path from 'path';
+
+import addErrorHandler from './middlewares/error-handler';
 
 class App {
-  public app: express.Application;
+  public app!: express.Application;
   public booksRoute: Books = new Books();
   public HealthRoute: Health = new Health();
 
@@ -22,8 +25,10 @@ class App {
   private config(): void {
     this.app.use(cors());
     this.app.use(bodyParser.json());
-    this.app.use(favicon(path.join(__dirname, '../node-js.png')));
-
+    this.app.use(favicon(path.join(__dirname, '../favicon.png')));
+    this.app.use(cors());
+    this.app.use(express.json({ limit: '100mb' }));
+    this.app.use(addErrorHandler);
     this.app.use(
       bodyParser.urlencoded({
         extended: false
