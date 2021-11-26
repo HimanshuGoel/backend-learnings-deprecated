@@ -10,7 +10,7 @@
     "dev": "npx ts-node-dev --respawn --transpile-only ./src/server.ts",
     "dev-debug": "npx ts-node-dev --respawn --transpile-only --debug ./src/server.ts",
     "prod": "npm run lint && tsc && node ./build/src/server.js",
-    "build": "tsc && cp favicon.png build\\favicon.png",
+    "build": "tsc",
     "test": "jest src",
     "lint": "eslint src/**/*.ts",
     "lint-fix": "eslint --fix src/**/*.ts",
