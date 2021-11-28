@@ -18,12 +18,13 @@ export class HealthRoute extends BaseApiRoute {
   public register(app: Application): void {
     app.use('/api/status', this.router);
 
-    this.router.get('/health', this.getServerHealth);
-    this.router.get('/system', this.getSystemInfo);
-    this.router.get('/time', this.getServerTime);
-    this.router.get('/usage', this.getResourceUsage);
-    this.router.get('/process', this.getProcessInfo);
-    this.router.get('/error', this.getError);
+    this.router
+      .get('/health', this.getServerHealth)
+      .get('/system', this.getSystemInfo)
+      .get('/time', this.getServerTime)
+      .get('/usage', this.getResourceUsage)
+      .get('/process', this.getProcessInfo)
+      .get('/error', this.getError);
   }
 
   private getServerHealth(req: Request, res: Response, next: NextFunction) {

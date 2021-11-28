@@ -3,7 +3,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 import registerRoutes from './routes';
-import addErrorHandler from './middlewares/error-handler';
+import { addApiErrorHandler, addLogsErrorHandler } from './middlewares/error-handler';
 
 class App {
   public app!: express.Application;
@@ -17,7 +17,8 @@ class App {
 
   private setMiddlewares(): void {
     this.app.use(cors());
-    this.app.use(addErrorHandler);
+    this.app.use(addLogsErrorHandler);
+    this.app.use(addApiErrorHandler);
     this.app.use(bodyParser.json());
     this.app.use(express.json({ limit: '100mb' }));
     this.app.use(bodyParser.urlencoded({ extended: false }));
