@@ -21,6 +21,10 @@ export class BooksRoute extends BaseApiRoute {
 
   public register(app: Application): void {
     app.use('/api', this.router);
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      // set access control allow origin on each request
+      res.set('access-control-allow-origin', process.env.CORS_ALLOW_ORIGIN);
+    });
 
     this.router
       .get('/login', this.doLogin)
@@ -52,6 +56,11 @@ export class BooksRoute extends BaseApiRoute {
 
           // res.cookie('token', token, { httpOnly: true });
 
+          // Set content type to each response
+          res.set('content-type', 'application/json');
+
+          // Include token with every response. Also, generate a new token for the next request.
+          // And check if old token has not receive again
           res.status(StatusCodes.OK).json({
             status: StatusCodes.OK,
             statusText: ReasonPhrases.OK,
@@ -133,9 +142,21 @@ export class BooksRoute extends BaseApiRoute {
 
   private getBooks(req: Request, res: Response, next: NextFunction) {
     try {
+      // Also, we should send hypermedia links to each response, it reduces coupling between client
+      // and server as client can use links to navigate between resources and also to
+      // get the list of resources.
       if (this.getAudienceFromToken(req.headers.authorization as string).includes(ADD_BOOK)) {
         BooksRepo.getBooks(
           function (response: any) {
+            response.forEach((element: any) => {
+              element.updateBook = {
+                id: element.id,
+                method: 'PUT',
+                href: `/api/books/${element.id}`,
+                type: 'application/json',
+                shape: 'http://localhost:8080/schema/save-book.schema.json'
+              };
+            });
             res.status(StatusCodes.OK).json({
               status: StatusCodes.OK,
               statusText: ReasonPhrases.OK,
