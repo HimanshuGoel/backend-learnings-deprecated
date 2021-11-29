@@ -4,6 +4,9 @@ export const payGrades = {
   high: '3'
 } as const;
 
+export const ADD_BOOK = 'ADD_BOOK';
+export const SHOW_USERS = 'SHOW_USERS';
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type t = typeof payGrades;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

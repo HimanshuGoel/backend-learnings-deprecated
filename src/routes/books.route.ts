@@ -1,10 +1,17 @@
 import { Request, Response, Application, NextFunction } from 'express';
 
+import * as bcrypt from 'bcrypt';
+
+import * as jwt from 'jsonwebtoken';
+
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import qs from 'qs';
+import { getUsers } from 'src/utilities/mock-data.utility';
 import { BooksRepo } from '../repos/books.repo';
 
 import BaseApiRoute from './base-api.route';
+import { getJwtOptions } from '../utilities/mock-data.utility';
+import { ADD_BOOK } from 'src/constants/global.constant';
 
 export class BooksRoute extends BaseApiRoute {
   constructor(express: Application) {
@@ -16,7 +23,9 @@ export class BooksRoute extends BaseApiRoute {
     app.use('/api', this.router);
 
     this.router
-      .get('/books', this.getBooks)
+      .get('/login', this.doLogin)
+
+      .get('/books', this.verifyToken, this.getBooks)
       .get('/books/search', this.getFullTextSearchedBooks)
       .get('/books/detailed-search', this.getDetailedSearchedBooks)
       .get('/books/:id', this.getBookById)
@@ -25,21 +34,126 @@ export class BooksRoute extends BaseApiRoute {
       .delete('/books/:id', this.deleteBookById);
   }
 
-  private getBooks(req: Request, res: Response, next: NextFunction) {
-    try {
-      BooksRepo.getBooks(
-        function (response: any) {
+  private doLogin(req: Request, res: Response, next: NextFunction) {
+    let base64Encoding = (req.headers.authorization as string).split(' ')[1];
+    let credentials = Buffer.from(base64Encoding, 'base64').toString().split(':');
+
+    const username = credentials[0];
+    const password = credentials[1];
+
+    const users = getUsers();
+
+    const user = users.find((user: any) => user.username === username);
+
+    if (user) {
+      bcrypt.compare(password, user.key, (err: any, result: any) => {
+        if (result) {
+          const token = this.generateJwtToken('', username);
+
+          // res.cookie('token', token, { httpOnly: true });
+
           res.status(StatusCodes.OK).json({
             status: StatusCodes.OK,
             statusText: ReasonPhrases.OK,
-            message: 'Books retrieved successfully',
-            data: response
+            message: 'Login successful',
+            data: { username: user.username, role: user.role },
+            token
           });
-        },
-        function (err: Error) {
-          next(err);
+        } else {
+          res.status(StatusCodes.UNAUTHORIZED).json({
+            status: StatusCodes.UNAUTHORIZED,
+            statusText: ReasonPhrases.UNAUTHORIZED,
+            message: 'Invalid credentials',
+            data: { user: { username: result.userName, role: result.role } }
+          });
         }
-      );
+      });
+    } else {
+      res.status(StatusCodes.UNAUTHORIZED).json({
+        status: StatusCodes.UNAUTHORIZED,
+        statusText: ReasonPhrases.UNAUTHORIZED,
+        message: 'Invalid username or password'
+      });
+    }
+  }
+
+  private generateJwtToken(prevToken: string, username: string) {
+    const name = username || this.getUsernameFromToken(prevToken);
+
+    const users = getUsers();
+    const user = users.find((user: any) => user.username === username);
+
+    const options = {
+      algorithm: process.env.ALGORITHM,
+      expiresIn: process.env.EXPIRY,
+      issuer: process.env.ISSUER,
+      subject: name || user.username,
+      audience:
+        user.role === 'admin'
+          ? getJwtOptions().JWT_OPTIONS.ADMIN_AUDIENCE
+          : getJwtOptions().JWT_OPTIONS.MEMBER_AUDIENCE
+    };
+
+    return jwt.sign({}, process.env.SECRET as jwt.Secret, options as jwt.SignOptions);
+  }
+
+  private getUsernameFromToken(token: string) {
+    const decoded = jwt.decode(token);
+    return decoded!.sub;
+  }
+
+  private getAudienceFromToken(token: string) {
+    const decoded = jwt.decode(token);
+    return decoded! as any['aud'];
+  }
+
+  private verifyToken(req: Request, res: Response, next: NextFunction) {
+    const token = req.headers.authorization as string;
+
+    if (token) {
+      jwt.verify(token, process.env.SECRET as jwt.Secret, (err: any, decoded: any) => {
+        if (err) {
+          res.status(StatusCodes.UNAUTHORIZED).json({
+            status: StatusCodes.UNAUTHORIZED,
+            statusText: ReasonPhrases.UNAUTHORIZED,
+            message: 'Invalid token'
+          });
+        } else {
+          next();
+        }
+      });
+    } else {
+      res.status(StatusCodes.UNAUTHORIZED).json({
+        status: StatusCodes.UNAUTHORIZED,
+        statusText: ReasonPhrases.UNAUTHORIZED,
+        message: 'No token provided'
+      });
+    }
+  }
+
+  private getBooks(req: Request, res: Response, next: NextFunction) {
+    try {
+      if (this.getAudienceFromToken(req.headers.authorization as string).includes(ADD_BOOK)) {
+        BooksRepo.getBooks(
+          function (response: any) {
+            res.status(StatusCodes.OK).json({
+              status: StatusCodes.OK,
+              statusText: ReasonPhrases.OK,
+              message: 'Books retrieved successfully',
+              data: response
+            });
+          },
+          function (err: Error) {
+            next(err);
+          }
+        );
+      } else {
+        res.status(StatusCodes.FORBIDDEN).json({
+          status: StatusCodes.FORBIDDEN,
+          statusText: ReasonPhrases.FORBIDDEN,
+          message: 'You are not authorized to access this resource'
+        });
+      }
     } catch (error) {
       next(error);
     }
