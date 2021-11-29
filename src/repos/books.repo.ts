@@ -2,15 +2,14 @@ import fs from 'fs';
 
 class BooksRepo {
   static getBooks(resolve: any, reject: any) {
-    const fileName = './assets/books.json';
-
-    fs.readFile(fileName, function (err, data) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(JSON.parse(data.toString()));
-      }
-    });
+    // const fileName = './assets/books.json';
+    // fs.readFile(fileName, function (err, data) {
+    //   if (err) {
+    //     reject(err);
+    //   } else {
+    //     resolve(JSON.parse(data.toString()));
+    //   }
+    // });
   }
 
   static searchBooks(searchObject: { id: number; name: string }, resolve: any, reject: any) {
@@ -35,39 +34,37 @@ class BooksRepo {
     });
   }
 
-  static update(newData: { id: number; name: string }, id, resolve: any, reject: any) {
-    const fileName = './assets/books.json';
-
-    fs.readFile(fileName, function (err, data) {
-      if (err) {
-        reject(err);
-      } else {
-        let book = JSON.parse(data.toString()).find(
-          (book: { id: number; name: string }) => book.id === id
-        );
-        if (book) {
-          // This Object.assign() approach is also works with PATCH method
-          Object.assign(book, newData);
-        }
-        resolve(book);
-      }
-    });
+  static update(newData: { id: number; name: string }, id: number, resolve: any, reject: any) {
+    // const fileName = './assets/books.json';
+    // fs.readFile(fileName, function (err, data) {
+    //   if (err) {
+    //     reject(err);
+    //   } else {
+    //     let book = JSON.parse(data.toString()).find(
+    //       (book: { id: number; name: string }) => book.id === id
+    //     );
+    //     if (book) {
+    //       // This Object.assign() approach is also works with PATCH method
+    //       Object.assign(book, newData);
+    //     }
+    //     resolve(book);
+    //   }
+    // });
   }
 
   static delete(id: number, resolve: any, reject: any) {
-    const fileName = './assets/books.json';
-
-    fs.readFile(fileName, function (err, data) {
-      if (err) {
-        reject(err);
-      } else {
-        let index = JSON.parse(data.toString()).findIndex((p) => p.id === id);
-        if (index > -1) {
-          JSON.parse(data.toString()).splice(index, 1);
-        }
-        resolve(index);
-      }
-    });
+    // const fileName = './assets/books.json';
+    // fs.readFile(fileName, function (err, data) {
+    //   if (err) {
+    //     reject(err);
+    //   } else {
+    //     let index = JSON.parse(data.toString()).findIndex((p) => p.id === id);
+    //     if (index > -1) {
+    //       JSON.parse(data.toString()).splice(index, 1);
+    //     }
+    //     resolve(index);
+    //   }
+    // });
   }
 }
 

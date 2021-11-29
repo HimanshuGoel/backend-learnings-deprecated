@@ -13,7 +13,7 @@ function logAndReturn<T>(value: T): T {
 }
 const someString = logAndReturn<string>('Hello');
 const someNumber = logAndReturn<number>(0);
-const someBook = logAndReturn<BookType>({ title: 'The Dark Tower' });
+// const someBook = logAndReturn<BookType>({ title: 'The Dark Tower' });
 
 function purge<T>(items: Array<T>): Array<T> {
   return items.splice(2, items.length);

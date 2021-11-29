@@ -6,12 +6,12 @@ import * as jwt from 'jsonwebtoken';
 
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import qs from 'qs';
-import { getUsers } from 'src/utilities/mock-data.utility';
+import { getUsers } from '../utilities/mock-data.utility';
 import { BooksRepo } from '../repos/books.repo';
 
 import BaseApiRoute from './base-api.route';
 import { getJwtOptions } from '../utilities/mock-data.utility';
-import { ADD_BOOK } from 'src/constants/global.constant';
+// import { ADD_BOOK } from 'src/constants/global.constant';
 
 export class BooksRoute extends BaseApiRoute {
   constructor(express: Application) {
@@ -26,84 +26,74 @@ export class BooksRoute extends BaseApiRoute {
       res.set('access-control-allow-origin', process.env.CORS_ALLOW_ORIGIN);
     });
 
-    this.router
-      .get('/login', this.doLogin)
+    this.router;
+    // .get('/login', this.doLogin)
 
-      .get('/books', this.verifyToken, this.getBooks)
-      .get('/books/search', this.getFullTextSearchedBooks)
-      .get('/books/detailed-search', this.getDetailedSearchedBooks)
-      .get('/books/:id', this.getBookById)
-      .post('/books/:id', this.createBookById)
-      .put('/books/:id', this.updateBookById)
-      .delete('/books/:id', this.deleteBookById);
+    // .get('/books', this.verifyToken, this.getBooks)
+    // .get('/books/search', this.getFullTextSearchedBooks)
+    // .get('/books/detailed-search', this.getDetailedSearchedBooks)
+    // .get('/books/:id', this.getBookById)
+    // .post('/books/:id', this.createBookById)
+    // .put('/books/:id', this.updateBookById)
+    // .delete('/books/:id', this.deleteBookById);
   }
 
   private doLogin(req: Request, res: Response, next: NextFunction) {
-    let base64Encoding = (req.headers.authorization as string).split(' ')[1];
-    let credentials = Buffer.from(base64Encoding, 'base64').toString().split(':');
-
-    const username = credentials[0];
-    const password = credentials[1];
-
-    const users = getUsers();
-
-    const user = users.find((user: any) => user.username === username);
-
-    if (user) {
-      bcrypt.compare(password, user.key, (err: any, result: any) => {
-        if (result) {
-          const token = this.generateJwtToken('', username);
-
-          // res.cookie('token', token, { httpOnly: true });
-
-          // Set content type to each response
-          res.set('content-type', 'application/json');
-
-          // Include token with every response. Also, generate a new token for the next request.
-          // And check if old token has not receive again
-          res.status(StatusCodes.OK).json({
-            status: StatusCodes.OK,
-            statusText: ReasonPhrases.OK,
-            message: 'Login successful',
-            data: { username: user.username, role: user.role },
-            token
-          });
-        } else {
-          res.status(StatusCodes.UNAUTHORIZED).json({
-            status: StatusCodes.UNAUTHORIZED,
-            statusText: ReasonPhrases.UNAUTHORIZED,
-            message: 'Invalid credentials',
-            data: { user: { username: result.userName, role: result.role } }
-          });
-        }
-      });
-    } else {
-      res.status(StatusCodes.UNAUTHORIZED).json({
-        status: StatusCodes.UNAUTHORIZED,
-        statusText: ReasonPhrases.UNAUTHORIZED,
-        message: 'Invalid username or password'
-      });
-    }
+    // let base64Encoding = (req.headers.authorization as string).split(' ')[1];
+    // let credentials = Buffer.from(base64Encoding, 'base64').toString().split(':');
+    // const username = credentials[0];
+    // const password = credentials[1];
+    // const users = getUsers();
+    // const user = users.find((user: any) => user.username === username);
+    // if (user) {
+    //   bcrypt.compare(password, user.key, (err: any, result: any) => {
+    //     if (result) {
+    //       const token = this.generateJwtToken('', username);
+    //       // res.cookie('token', token, { httpOnly: true });
+    //       // Set content type to each response
+    //       res.set('content-type', 'application/json');
+    //       // Include token with every response. Also, generate a new token for the next request.
+    //       // And check if old token has not receive again
+    //       res.status(StatusCodes.OK).json({
+    //         status: StatusCodes.OK,
+    //         statusText: ReasonPhrases.OK,
+    //         message: 'Login successful',
+    //         data: { username: user.username, role: user.role },
+    //         token
+    //       });
+    //     } else {
+    //       res.status(StatusCodes.UNAUTHORIZED).json({
+    //         status: StatusCodes.UNAUTHORIZED,
+    //         statusText: ReasonPhrases.UNAUTHORIZED,
+    //         message: 'Invalid credentials',
+    //         data: { user: { username: result.userName, role: result.role } }
+    //       });
+    //     }
+    //   });
+    // } else {
+    //   res.status(StatusCodes.UNAUTHORIZED).json({
+    //     status: StatusCodes.UNAUTHORIZED,
+    //     statusText: ReasonPhrases.UNAUTHORIZED,
+    //     message: 'Invalid username or password'
+    //   });
+    // }
   }
 
   private generateJwtToken(prevToken: string, username: string) {
-    const name = username || this.getUsernameFromToken(prevToken);
-
-    const users = getUsers();
-    const user = users.find((user: any) => user.username === username);
-
-    const options = {
-      algorithm: process.env.ALGORITHM,
-      expiresIn: process.env.EXPIRY,
-      issuer: process.env.ISSUER,
-      subject: name || user.username,
-      audience:
-        user.role === 'admin'
-          ? getJwtOptions().JWT_OPTIONS.ADMIN_AUDIENCE
-          : getJwtOptions().JWT_OPTIONS.MEMBER_AUDIENCE
-    };
-
-    return jwt.sign({}, process.env.SECRET as jwt.Secret, options as jwt.SignOptions);
+    // const name = username || this.getUsernameFromToken(prevToken);
+    // const users = getUsers();
+    // const user = users.find((user: any) => user.username === username);
+    // const options = {
+    //   algorithm: process.env.ALGORITHM,
+    //   expiresIn: process.env.EXPIRY,
+    //   issuer: process.env.ISSUER,
+    //   subject: name || user.username,
+    //   audience:
+    //     user.role === 'admin'
+    //       ? getJwtOptions().JWT_OPTIONS.ADMIN_AUDIENCE
+    //       : getJwtOptions().JWT_OPTIONS.MEMBER_AUDIENCE
+    // };
+    // return jwt.sign({}, process.env.SECRET as jwt.Secret, options as jwt.SignOptions);
   }
 
   private getUsernameFromToken(token: string) {
@@ -141,43 +131,43 @@ export class BooksRoute extends BaseApiRoute {
   }
 
   private getBooks(req: Request, res: Response, next: NextFunction) {
-    try {
-      // Also, we should send hypermedia links to each response, it reduces coupling between client
-      // and server as client can use links to navigate between resources and also to
-      // get the list of resources.
-      if (this.getAudienceFromToken(req.headers.authorization as string).includes(ADD_BOOK)) {
-        BooksRepo.getBooks(
-          function (response: any) {
-            response.forEach((element: any) => {
-              element.updateBook = {
-                id: element.id,
-                method: 'PUT',
-                href: `/api/books/${element.id}`,
-                type: 'application/json',
-                shape: 'http://localhost:8080/schema/save-book.schema.json'
-              };
-            });
-            res.status(StatusCodes.OK).json({
-              status: StatusCodes.OK,
-              statusText: ReasonPhrases.OK,
-              message: 'Books retrieved successfully',
-              data: response
-            });
-          },
-          function (err: Error) {
-            next(err);
-          }
-        );
-      } else {
-        res.status(StatusCodes.FORBIDDEN).json({
-          status: StatusCodes.FORBIDDEN,
-          statusText: ReasonPhrases.FORBIDDEN,
-          message: 'You are not authorized to access this resource'
-        });
-      }
-    } catch (error) {
-      next(error);
-    }
+    // try {
+    //   // Also, we should send hypermedia links to each response, it reduces coupling between client
+    //   // and server as client can use links to navigate between resources and also to
+    //   // get the list of resources.
+    //   if (this.getAudienceFromToken(req.headers.authorization as string).includes(ADD_BOOK)) {
+    //     BooksRepo.getBooks(
+    //       function (response: any) {
+    //         response.forEach((element: any) => {
+    //           element.updateBook = {
+    //             id: element.id,
+    //             method: 'PUT',
+    //             href: `/api/books/${element.id}`,
+    //             type: 'application/json',
+    //             shape: 'http://localhost:8080/schema/save-book.schema.json'
+    //           };
+    //         });
+    //         res.status(StatusCodes.OK).json({
+    //           status: StatusCodes.OK,
+    //           statusText: ReasonPhrases.OK,
+    //           message: 'Books retrieved successfully',
+    //           data: response
+    //         });
+    //       },
+    //       function (err: Error) {
+    //         next(err);
+    //       }
+    //     );
+    //   } else {
+    //     res.status(StatusCodes.FORBIDDEN).json({
+    //       status: StatusCodes.FORBIDDEN,
+    //       statusText: ReasonPhrases.FORBIDDEN,
+    //       message: 'You are not authorized to access this resource'
+    //     });
+    //   }
+    // } catch (error) {
+    //   next(error);
+    // }
   }
 
   // Get full text based search
@@ -248,21 +238,20 @@ export class BooksRoute extends BaseApiRoute {
   }
 
   private getBookById(req: Request, res: Response, next: NextFunction) {
-    try {
-      const books = BooksRepo.getBooks();
-      const id = Number(req.params.id);
-      const response = books.find((book) => book.id === id);
-
-      // Return status 404 if record is not found for updating, patching or deleting
-      res.status(StatusCodes.OK).json({
-        status: StatusCodes.OK,
-        statusText: ReasonPhrases.OK,
-        message: 'Book retrieved successfully',
-        data: response
-      });
-    } catch (error) {
-      next(error);
-    }
+    // try {
+    //   const books = BooksRepo.getBooks();
+    //   const id = Number(req.params.id);
+    //   const response = books.find((book: any) => book.id === id);
+    //   // Return status 404 if record is not found for updating, patching or deleting
+    //   res.status(StatusCodes.OK).json({
+    //     status: StatusCodes.OK,
+    //     statusText: ReasonPhrases.OK,
+    //     message: 'Book retrieved successfully',
+    //     data: response
+    //   });
+    // } catch (error) {
+    //   next(error);
+    // }
   }
 
   private createBookById(req: Request, res: Response, next: NextFunction) {
