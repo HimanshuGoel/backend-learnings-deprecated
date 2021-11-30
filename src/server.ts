@@ -1,3 +1,5 @@
+require('source-map-support').install();
+
 import app from './app';
 import Logger from './utilities/logger.utility';
 
