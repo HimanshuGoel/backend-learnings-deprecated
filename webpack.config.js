@@ -2,9 +2,8 @@ const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 const WebpackShellPluginNext = require('webpack-shell-plugin-next');
 
-const {
-  NODE_ENV = 'production',
-} = process.env;
+const { NODE_ENV = 'production' } = process.env;
+
 module.exports = {
   plugins: [
     new WebpackShellPluginNext({
@@ -17,9 +16,7 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: [
-          'ts-loader',
-        ]
+        use: ['ts-loader']
       }
     ]
   },
@@ -31,6 +28,6 @@ module.exports = {
     filename: 'index.js'
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.js']
   }
-}
+};

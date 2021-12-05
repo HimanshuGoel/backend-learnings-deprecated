@@ -1,21 +1,11 @@
 {
   "recommendations": [
-    "bierner.markdown-mermaid",
     "cssho.vscode-svgviewer",
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "deerawan.vscode-protractor-snippets",
-    "jock.svg",
-    "johnpapa.angular2",
-    "MariusAlchimavicius.json-to-ts",
-    "msjsdiag.debugger-for-chrome",
     "ms-azuretools.vscode-docker",
     "pmneo.tsimporter",
-    "ryanluker.vscode-coverage-gutters",
     "streetsidesoftware.code-spell-checker",
-    "stringham.move-ts",
-    "WallabyJs.wallaby-vscode",
-    "xabikos.JasmineSnippets",
-    "mike-co.import-sorter"
+    "WallabyJs.wallaby-vscode"
   ]
 }

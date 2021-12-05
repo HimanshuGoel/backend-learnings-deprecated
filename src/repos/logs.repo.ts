@@ -1,8 +1,8 @@
 import fs from 'fs';
 
-const FILE_NAME = './logs/logs.txt';
+const FILE_NAME = '../logs/logs.txt';
 
-class LogsRepo {
+export class LogsRepo {
   static write(data: any, resolve: any, reject: any) {
     let toWrite = '*'.repeat(80) + '\r\n';
     toWrite += 'Date/Time: ' + new Date().toLocaleDateString() + '\r\n';
@@ -17,4 +17,3 @@ class LogsRepo {
     });
   }
 }
-export { LogsRepo };

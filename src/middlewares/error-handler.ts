@@ -3,9 +3,9 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import express from 'express';
 import util from 'util';
 
+import { LogsRepo } from '../repos/logs.repo';
 import ApiError from '../abstractions/api-error';
 import Logger from '../utilities/logger.utility';
-import { LogsRepo } from '../repos/logs.repo';
 
 const addApiErrorHandler = (
   err: ApiError,

@@ -1,6 +1,8 @@
 import cors from 'cors';
 import express from 'express';
 import bodyParser from 'body-parser';
+import path from 'path';
+import favicon from 'serve-favicon';
 
 import registerRoutes from './routes';
 import { addApiErrorHandler, addLogsErrorHandler } from './middlewares/error-handler';
@@ -25,7 +27,7 @@ class App {
   }
 
   private setFavicon(): void {
-    // this.app.use(favicon(path.join(__dirname, '../favicon.png')));
+    this.app.use(favicon(path.join(__dirname, '../favicon.png')));
   }
 
   private setRoutes(): void {

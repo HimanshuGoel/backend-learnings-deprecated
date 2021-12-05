@@ -1,11 +1,12 @@
+/************************************************************************/
+/********************************Examples********************************/
+/************************************************************************/
+
 export const payGrades = {
   low: '1',
   average: '2',
   high: '3'
 } as const;
-
-export const ADD_BOOK = 'ADD_BOOK';
-export const SHOW_USERS = 'SHOW_USERS';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type t = typeof payGrades;
@@ -35,3 +36,14 @@ export const AdminStaffPayGrades = {
 type allPayGrades = typeof TechStaffPayGrades | typeof AdminStaffPayGrades;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type allPayValues = allPayGrades[keyof allPayGrades]; // "T1" | "T2" | "T3" | "A1" | "A2" | "A3"
+
+/************************************************************************/
+/********************************App Specific****************************/
+/************************************************************************/
+
+export const CREATE_BOOK = 'UPDATE_BOOK';
+export const READ_BOOK = 'READ_BOOK';
+export const UPDATE_BOOK = 'UPDATE_BOOK';
+export const DELETE_BOOK = 'UPDATE_BOOK';
+
+export const SHOW_USERS = 'SHOW_USERS';

@@ -6,6 +6,11 @@ It provides standard initial structure and code examples for different topics wh
 
 This will also serve as a playground for working upon different proof-of-concepts.
 
+## Technology Involved
+
+- Node.js
+- TypeScript
+
 ## Running Development Mode
 
 - Install the dependencies `npm install`

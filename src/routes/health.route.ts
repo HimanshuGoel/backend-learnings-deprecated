@@ -17,6 +17,10 @@ export class HealthRoute extends BaseApiRoute {
 
   public register(app: Application): void {
     app.use('/api/status', this.router);
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      res.set('content-type', 'application/json');
+      res.set('access-control-allow-origin', process.env.CORS_ALLOW_ORIGIN);
+    });
 
     this.router
       .get('/health', this.getServerHealth)
@@ -128,5 +132,3 @@ export class HealthRoute extends BaseApiRoute {
     }
   }
 }
-
-export default HealthRoute;
