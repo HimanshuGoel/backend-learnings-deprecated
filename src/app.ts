@@ -1,4 +1,6 @@
 import cors from 'cors';
+import helmet from 'helmet';
+import morgan from 'morgan';
 import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
@@ -19,6 +21,8 @@ class App {
 
   private setMiddlewares(): void {
     this.app.use(cors());
+    this.app.use(helmet());
+    this.app.use(morgan('tiny'));
     this.app.use(addLogsErrorHandler);
     this.app.use(addApiErrorHandler);
     this.app.use(bodyParser.json());
