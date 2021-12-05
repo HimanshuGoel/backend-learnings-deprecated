@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const FILE_NAME = './assets/users.json';
+const FILE_NAME = './src/assets/users.json';
 
 export class UsersRepo {
   static getAll(resolve: any, reject: any) {

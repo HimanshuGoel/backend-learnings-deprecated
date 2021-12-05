@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-const FILE_NAME = '../logs/logs.txt';
+const FILE_NAME = './src/logs/logs.txt';
 
 export class LogsRepo {
   static write(data: any, resolve: any, reject: any) {

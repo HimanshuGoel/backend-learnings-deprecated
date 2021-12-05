@@ -20,6 +20,9 @@ export class HealthRoute extends BaseApiRoute {
     app.use((req: Request, res: Response, next: NextFunction) => {
       res.set('content-type', 'application/json');
       res.set('access-control-allow-origin', process.env.CORS_ALLOW_ORIGIN);
+      res.set('access-control-allow-methods', 'GET, POST, PUT, DELETE');
+      res.set('access-control-allow-headers', 'authorization, content-type');
+      next();
     });
 
     this.router

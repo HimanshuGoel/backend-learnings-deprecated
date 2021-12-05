@@ -1,7 +1,7 @@
 import fs from 'fs';
 import shortid from 'shortid';
 
-const FILE_NAME = './assets/books.json';
+const FILE_NAME = './src/assets/books.json';
 
 export class BooksRepo {
   static getBooks(resolve: any, reject: any) {
