@@ -28,49 +28,48 @@ export class AuthRoute extends BaseApiRoute {
     this.router.get('/login', this.doLogin);
   }
 
-  private doLogin(req: Request, res: Response, next: NextFunction) {
+  private async doLogin(req: Request, res: Response, next: NextFunction) {
     let base64Encoding = (req.headers.authorization as string).split(' ')[1];
     let credentials = Buffer.from(base64Encoding, 'base64').toString().split(':');
 
     const username = credentials[0];
     const password = credentials[1];
 
-    UsersRepo.getAll(
-      (response: any) => {
-        const user = response.find((user: any) => user.username === username);
-        if (user) {
-          bcrypt.compare(password, user.key, (err: any, result: any) => {
-            if (result) {
-              const token = this.generateJwtToken(username);
-              res.status(StatusCodes.OK).json({
-                status: StatusCodes.OK,
-                statusText: ReasonPhrases.OK,
-                message: 'Login successful',
-                data: { username: user.username, role: user.role },
-                token
-              });
-            } else {
-              res.status(StatusCodes.UNAUTHORIZED).json({
-                status: StatusCodes.UNAUTHORIZED,
-                statusText: ReasonPhrases.UNAUTHORIZED,
-                message: 'Invalid username or password',
-                data: []
-              });
-            }
-          });
-        } else {
-          res.status(StatusCodes.UNAUTHORIZED).json({
-            status: StatusCodes.UNAUTHORIZED,
-            statusText: ReasonPhrases.UNAUTHORIZED,
-            message: 'Invalid username or password',
-            data: []
-          });
-        }
-      },
-      function (err: Error) {
-        next(err);
+    try {
+      const users = await UsersRepo.getAll();
+
+      const user = users.find((user: any) => user.username === username);
+      if (user) {
+        bcrypt.compare(password, user.key, (err: any, result: any) => {
+          if (result) {
+            const token = this.generateJwtToken(username);
+            res.status(StatusCodes.OK).json({
+              status: StatusCodes.OK,
+              statusText: ReasonPhrases.OK,
+              message: 'Login successful',
+              data: { username: user.username, role: user.role },
+              token
+            });
+          } else {
+            res.status(StatusCodes.UNAUTHORIZED).json({
+              status: StatusCodes.UNAUTHORIZED,
+              statusText: ReasonPhrases.UNAUTHORIZED,
+              message: 'Invalid username or password',
+              data: []
+            });
+          }
+        });
+      } else {
+        res.status(StatusCodes.UNAUTHORIZED).json({
+          status: StatusCodes.UNAUTHORIZED,
+          statusText: ReasonPhrases.UNAUTHORIZED,
+          message: 'Invalid username or password',
+          data: []
+        });
       }
-    );
+    } catch (error) {
+      next(error);
+    }
   }
 
   private generateJwtToken(user: any, prevToken: string = '') {

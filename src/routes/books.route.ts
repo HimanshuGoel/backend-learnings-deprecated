@@ -36,33 +36,28 @@ export class BooksRoute extends BaseApiRoute {
       .delete('/books/:id', this.deleteBookById);
   }
 
-  private getBooks(req: Request, res: Response, next: NextFunction) {
+  private async getBooks(req: Request, res: Response, next: NextFunction) {
     try {
       // Sending hypermedia links to each response will reduces the coupling between client and server
       // as client can use links to navigate between resources and also to get the list of resources.
       if (this.getAudienceFromToken(req.headers.authorization as string).includes(READ_BOOK)) {
-        BooksRepo.getBooks(
-          function (response: any) {
-            response.forEach((element: any) => {
-              element.updateBook = {
-                id: element.id,
-                method: 'PUT',
-                href: `/api/books/${element.id}`,
-                type: 'application/json',
-                shape: 'http://localhost:8080/schema/save-book.schema.json'
-              };
-            });
-            res.status(StatusCodes.OK).json({
-              status: StatusCodes.OK,
-              statusText: ReasonPhrases.OK,
-              message: 'Books retrieved successfully',
-              data: response
-            });
-          },
-          function (err: Error) {
-            next(err);
-          }
-        );
+        const books = await BooksRepo.getBooks();
+        books.forEach((element: any) => {
+          element.updateBook = {
+            id: element.id,
+            method: 'PUT',
+            href: `/api/books/${element.id}`,
+            type: 'application/json',
+            shape: 'http://localhost:8080/schema/save-book.schema.json'
+          };
+        });
+
+        res.status(StatusCodes.OK).json({
+          status: StatusCodes.OK,
+          statusText: ReasonPhrases.OK,
+          message: 'Books retrieved successfully',
+          data: books
+        });
       } else {
         res.status(StatusCodes.FORBIDDEN).json({
           status: StatusCodes.FORBIDDEN,
@@ -104,27 +99,21 @@ export class BooksRoute extends BaseApiRoute {
     }
   }
 
-  private getFullTextSearchedBooks(req: Request, res: Response, next: NextFunction) {
+  private async getFullTextSearchedBooks(req: Request, res: Response, next: NextFunction) {
     try {
-      BooksRepo.getBooks(
-        function (response: any) {
-          const keywords = req.query.keywords as string;
-          const result = response.filter((book: { id: number; title: string }) => {
-            const fullText = book.id + book.title;
-            return fullText.toLowerCase().indexOf(keywords.toLowerCase()) !== -1;
-          });
+      const books = await BooksRepo.getBooks();
+      const keywords = req.query.keywords as string;
+      const result = books.filter((book: { id: number; title: string }) => {
+        const fullText = book.id + book.title;
+        return fullText.toLowerCase().indexOf(keywords.toLowerCase()) !== -1;
+      });
 
-          res.status(StatusCodes.OK).json({
-            status: StatusCodes.OK,
-            statusText: ReasonPhrases.OK,
-            message: 'Books retrieved successfully',
-            data: result
-          });
-        },
-        function (err: Error) {
-          next(err);
-        }
-      );
+      res.status(StatusCodes.OK).json({
+        status: StatusCodes.OK,
+        statusText: ReasonPhrases.OK,
+        message: 'Books retrieved successfully',
+        data: result
+      });
     } catch (error) {
       next(error);
     }
@@ -132,71 +121,57 @@ export class BooksRoute extends BaseApiRoute {
 
   // Get search based on query string parameters. Example -
   // api/books/detailed-search?name[val]=Essential Backpack&price[val]=100&price[op]=lt
-  private getDetailedSearchedBooks(req: Request, res: Response, next: NextFunction) {
+  private async getDetailedSearchedBooks(req: Request, res: Response, next: NextFunction) {
     try {
-      BooksRepo.getBooks(
-        function (response: any) {
-          const query = qs.parse(req.query as any);
+      const books = await BooksRepo.getBooks();
+      const query = qs.parse(req.query as any);
+      const result = books.filter((book: { id: number; title: string }) => {
+        return Object.keys(query).reduce((found, key) => {
+          const obj = query[key] as any;
+          switch (obj.op) {
+            case 'eq':
+              return found && (book as any)[key] === obj.val;
+            case 'lt':
+              return found && (book as any)[key] < obj.val;
+            case 'gt':
+              return found && (book as any)[key] > obj.val;
+            default:
+              return found && (book as any)[key].indexOf(obj.val) !== -1;
+          }
+        }, true);
+      });
 
-          const result = response.filter((book: { id: number; title: string }) => {
-            return Object.keys(query).reduce((found, key) => {
-              const obj = query[key] as any;
-              switch (obj.op) {
-                case 'eq':
-                  return found && (book as any)[key] === obj.val;
-                case 'lt':
-                  return found && (book as any)[key] < obj.val;
-                case 'gt':
-                  return found && (book as any)[key] > obj.val;
-                default:
-                  return found && (book as any)[key].indexOf(obj.val) !== -1;
-              }
-            }, true);
-          });
-
-          res.status(StatusCodes.OK).json({
-            status: StatusCodes.OK,
-            statusText: ReasonPhrases.OK,
-            message: 'Books retrieved successfully',
-            data: result
-          });
-        },
-        function (err: Error) {
-          next(err);
-        }
-      );
+      res.status(StatusCodes.OK).json({
+        status: StatusCodes.OK,
+        statusText: ReasonPhrases.OK,
+        message: 'Books retrieved successfully',
+        data: result
+      });
     } catch (error) {
       next(error);
     }
   }
 
-  private getBookById(req: Request, res: Response, next: NextFunction) {
+  private async getBookById(req: Request, res: Response, next: NextFunction) {
     try {
       if (this.getAudienceFromToken(req.headers.authorization as string).includes(READ_BOOK)) {
         const bookId = req.params.id;
-        BooksRepo.getBooksById(
-          bookId,
-          function (response: any) {
-            response.forEach((element: any) => {
-              element.updateBook = {
-                id: element.id,
-                method: 'PUT',
-                href: `/api/books/${element.id}`,
-                type: 'application/json',
-                shape: 'http://localhost:8080/schema/save-book.schema.json'
-              };
-            });
-            res.status(StatusCodes.OK).json({
-              status: StatusCodes.OK,
-              statusText: ReasonPhrases.OK,
-              message: 'Books retrieved successfully',
-              data: response
-            });
-          },
-          function (err: Error) {
-            next(err);
-          }
-        );
+        const book = await BooksRepo.getBooksById(bookId);
+        book.forEach((element: any) => {
+          element.updateBook = {
+            id: element.id,
+            method: 'PUT',
+            href: `/api/books/${element.id}`,
+            type: 'application/json',
+            shape: 'http://localhost:8080/schema/save-book.schema.json'
+          };
+        });
+        res.status(StatusCodes.OK).json({
+          status: StatusCodes.OK,
+          statusText: ReasonPhrases.OK,
+          message: 'Books retrieved successfully',
+          data: book
+        });
       } else {
         res.status(StatusCodes.FORBIDDEN).json({
           status: StatusCodes.FORBIDDEN,
@@ -209,7 +184,7 @@ export class BooksRoute extends BaseApiRoute {
     }
   }
 
-  private createBookById(req: Request, res: Response, next: NextFunction) {
+  private async createBookById(req: Request, res: Response, next: NextFunction) {
     try {
       if (this.getAudienceFromToken(req.headers.authorization as string).includes(CREATE_BOOK)) {
         const { name, author, price } = req.body;
@@ -242,20 +217,13 @@ export class BooksRoute extends BaseApiRoute {
           res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(errors);
         } else {
           const bookId = req.params.id;
-          BooksRepo.create(
-            bookId,
-            function (response: any) {
-              res.status(StatusCodes.CREATED).json({
-                status: StatusCodes.CREATED,
-                statusText: ReasonPhrases.CREATED,
-                message: 'Book created successfully',
-                data: response
-              });
-            },
-            function (err: Error) {
-              next(err);
-            }
-          );
+          const newBook = BooksRepo.create(bookId);
+          res.status(StatusCodes.CREATED).json({
+            status: StatusCodes.CREATED,
+            statusText: ReasonPhrases.CREATED,
+            message: 'Book created successfully',
+            data: newBook
+          });
         }
       } else {
         res.status(StatusCodes.FORBIDDEN).json({
@@ -269,7 +237,7 @@ export class BooksRoute extends BaseApiRoute {
     }
   }
 
-  private updateBookById(req: Request, res: Response, next: NextFunction) {
+  private async updateBookById(req: Request, res: Response, next: NextFunction) {
     try {
       if (this.getAudienceFromToken(req.headers.authorization as string).includes(UPDATE_BOOK)) {
         const { id, name, author, price } = req.body;
@@ -309,20 +277,13 @@ export class BooksRoute extends BaseApiRoute {
         if (errors.length > 0) {
           res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(errors);
         } else {
-          BooksRepo.update(
-            req.body,
-            function (response: any) {
-              res.status(StatusCodes.OK).json({
-                status: StatusCodes.OK,
-                statusText: ReasonPhrases.OK,
-                message: 'Book updated successfully',
-                data: response
-              });
-            },
-            function (err: Error) {
-              next(err);
-            }
-          );
+          const updatedBook = BooksRepo.update(req.body);
+          res.status(StatusCodes.OK).json({
+            status: StatusCodes.OK,
+            statusText: ReasonPhrases.OK,
+            message: 'Book updated successfully',
+            data: updatedBook
+          });
         }
       } else {
         res.status(StatusCodes.FORBIDDEN).json({
@@ -336,24 +297,17 @@ export class BooksRoute extends BaseApiRoute {
     }
   }
 
-  private deleteBookById(req: Request, res: Response, next: NextFunction) {
+  private async deleteBookById(req: Request, res: Response, next: NextFunction) {
     try {
       if (this.getAudienceFromToken(req.headers.authorization as string).includes(READ_BOOK)) {
         const bookId = req.params.id;
-        BooksRepo.delete(
-          bookId,
-          function (response: any) {
-            res.status(StatusCodes.NO_CONTENT).json({
-              status: StatusCodes.NO_CONTENT,
-              statusText: ReasonPhrases.NO_CONTENT,
-              message: 'Book deleted successfully',
-              data: { bookId: response }
-            });
-          },
-          function (err: Error) {
-            next(err);
-          }
-        );
+        const deletedBookIndex = BooksRepo.delete(bookId);
+        res.status(StatusCodes.NO_CONTENT).json({
+          status: StatusCodes.NO_CONTENT,
+          statusText: ReasonPhrases.NO_CONTENT,
+          message: 'Book deleted successfully',
+          data: { bookId: deletedBookIndex }
+        });
       } else {
         res.status(StatusCodes.FORBIDDEN).json({
           status: StatusCodes.FORBIDDEN,

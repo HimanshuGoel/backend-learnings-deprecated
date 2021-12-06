@@ -17,3 +17,15 @@ test('should return Base Path', (done) => {
       return done();
     });
 });
+
+test('should return correct Book as per its id', (done) => {
+  request(server)
+    .get('/api/books/1')
+    .expect(200, { message: 'base path' })
+    .end((err) => {
+      if (err) {
+        return done(err);
+      }
+      return done();
+    });
+});
