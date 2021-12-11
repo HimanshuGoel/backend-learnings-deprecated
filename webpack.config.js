@@ -20,6 +20,7 @@ module.exports = {
       }
     ]
   },
+  devtool: 'inline-source-map',
   entry: './src/server.ts',
   mode: NODE_ENV,
   target: 'node',

@@ -5,9 +5,15 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import favicon from 'serve-favicon';
+import rateLimit from 'express-rate-limit';
 
 import registerRoutes from './routes';
 import { addApiErrorHandler, addLogsErrorHandler } from './middlewares/error-handler';
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100 // limit each IP to 100 requests per windowMs
+});
 
 class App {
   public app!: express.Application;
@@ -21,12 +27,13 @@ class App {
 
   private setMiddlewares(): void {
     this.app.use(cors());
+    this.app.use(limiter);
     this.app.use(helmet());
     this.app.use(morgan('tiny'));
     this.app.use(addLogsErrorHandler);
     this.app.use(addApiErrorHandler);
     this.app.use(bodyParser.json());
-    this.app.use(express.json({ limit: '100mb' }));
+    this.app.use(express.json({ limit: '300kb' }));
     this.app.use(bodyParser.urlencoded({ extended: false }));
   }
 

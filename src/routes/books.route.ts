@@ -1,6 +1,8 @@
 import { Request, Response, Application, NextFunction } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 
+import { Validator } from 'jsonschema';
+
 import * as jwt from 'jsonwebtoken';
 
 import qs from 'qs';
@@ -37,6 +39,58 @@ export class BooksRoute extends BaseApiRoute {
   }
 
   private async getBooks(req: Request, res: Response, next: NextFunction) {
+    var v = new Validator();
+    var instance = 4;
+    var schema = { type: 'number' };
+    console.log(v.validate(instance, schema));
+
+    var validate = require('jsonschema').validate;
+    console.log(validate(4, { type: 'number' }));
+
+    var Validator = require('jsonschema').Validator;
+    var v = new Validator();
+
+    // Address, to be embedded on Person
+    var addressSchema = {
+      id: '/SimpleAddress',
+      type: 'object',
+      properties: {
+        lines: {
+          type: 'array',
+          items: { type: 'string' }
+        },
+        zip: { type: 'string' },
+        city: { type: 'string' },
+        country: { type: 'string' }
+      },
+      required: ['country']
+    };
+
+    // Person
+    var schema1 = {
+      id: '/SimplePerson',
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        address: { $ref: '/SimpleAddress' },
+        votes: { type: 'integer', minimum: 1 }
+      }
+    };
+
+    var p = {
+      name: 'Barack Obama',
+      address: {
+        lines: ['1600 Pennsylvania Avenue Northwest'],
+        zip: 'DC 20500',
+        city: 'Washington',
+        country: 'USA'
+      },
+      votes: 'lots'
+    };
+
+    v.addSchema(addressSchema, '/SimpleAddress');
+    console.log(v.validate(p, schema1));
+
     try {
       // Sending hypermedia links to each response will reduces the coupling between client and server
       // as client can use links to navigate between resources and also to get the list of resources.
@@ -185,6 +239,10 @@ export class BooksRoute extends BaseApiRoute {
   }
 
   private async createBookById(req: Request, res: Response, next: NextFunction) {
+    // Check if request payload content-type matches json, because body-parser does not check for content types
+    if (!req.is('json')) {
+      return res.sendStatus(415); // -> Unsupported media type if request doesn't have JSON body
+    }
     try {
       if (this.getAudienceFromToken(req.headers.authorization as string).includes(CREATE_BOOK)) {
         const { name, author, price } = req.body;
