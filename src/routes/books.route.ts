@@ -1,6 +1,6 @@
 import { Request, Response, Application, NextFunction } from 'express';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
-
+import { Validator, validate } from 'jsonschema';
 import qs from 'qs';
 
 import { BooksRepo } from '../repos/books.repo';
@@ -33,16 +33,14 @@ export class BooksRoute extends BaseApiRoute {
       .delete('/books/:bookId', this.deleteBookById);
   }
 
-  private async getBooks(req: Request, res: Response, next: NextFunction) {
+  private validateSchema() {
     var v = new Validator();
     var instance = 4;
     var schema = { type: 'number' };
     console.log(v.validate(instance, schema));
 
-    var validate = require('jsonschema').validate;
     console.log(validate(4, { type: 'number' }));
 
-    var Validator = require('jsonschema').Validator;
     var v = new Validator();
 
     // Address, to be embedded on Person
@@ -85,11 +83,12 @@ export class BooksRoute extends BaseApiRoute {
 
     v.addSchema(addressSchema, '/SimpleAddress');
     console.log(v.validate(p, schema1));
+  }
 
+  private async getBooks(req: Request, res: Response, next: NextFunction) {
     try {
       // Sending hypermedia links to each response will reduces the coupling between client and server
       // as client can use links to navigate between resources and also to get the list of resources.
-
       const books = await BooksRepo.getBooks();
       books.forEach((element: any) => {
         element.updateBook = {
@@ -193,6 +192,8 @@ export class BooksRoute extends BaseApiRoute {
     if (!req.is('json')) {
       res.sendStatus(415); // -> Unsupported media type if request doesn't have JSON body
     }
+
+    this.validateSchema();
 
     // Check if request payload content-type matches json, because body-parser does not check for content types
     try {
