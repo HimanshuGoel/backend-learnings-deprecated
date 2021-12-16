@@ -28,6 +28,7 @@
       }
     ],
     "no-underscore-dangle": "off",
+    "no-null-keyword": true,
     "no-shadow": "off",
     "no-new": 0,
     "@typescript-eslint/no-shadow": ["error"],

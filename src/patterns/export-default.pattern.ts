@@ -3,4 +3,4 @@ export default class {
   director!: string;
 }
 
-import AnimatedMovie from './export-default.pattern';
+// import AnimatedMovie from './export-default.pattern';

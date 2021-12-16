@@ -14,5 +14,5 @@ function GetMagazineByIssueNumber(issueNumber: Number): Magazine {
 
 export { Periodical, Magazine, GetMagazineByIssueNumber as getMag };
 
-import { getMag } from './export-module-statement.pattern';
-import * as mag from './export-module-statement.pattern';
+// import { getMag } from './export-module-statement.pattern';
+// import * as mag from './export-module-statement.pattern';

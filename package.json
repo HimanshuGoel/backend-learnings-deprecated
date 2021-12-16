@@ -4,6 +4,10 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
+    "ndb": "ndb nodemon src/sever.ts",
+    "dev3": "nodemon --config nodemon.json src/index.ts",
+    "dev3:debug": "nodemon --config nodemon.json --inspect-brk src/server.ts",
+    "debug": "node --inspect build/index.js",
     "check-license": "license-checker --summary --failOn BSD",
     "dependency-updates": "ncu",
     "webpack": "webpack",
