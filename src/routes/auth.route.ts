@@ -7,7 +7,7 @@ import * as jwt from 'jsonwebtoken';
 import BaseApiRoute from './base-api.route';
 
 import { UsersRepo } from '../repos/users.repo';
-import { getJwtOptions } from '../utilities/global-functions.utility';
+import { getJwtOptions } from '../utilities/functions.utility';
 
 export class AuthRoute extends BaseApiRoute {
   constructor(express: Application) {
