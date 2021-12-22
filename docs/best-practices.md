@@ -5,5 +5,6 @@ These best practices more of a knowledge sharing which have been acquired collec
 ## Quick Reference
 
 - [Node JS](./node-js.md)
+- [Security](./SECURITY.md)
 - [Typescript](./typescript.md)
 - [Unit Testing](./unit-testing.md)
