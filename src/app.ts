@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import favicon from 'serve-favicon';
 import rateLimit from 'express-rate-limit';
+import xss from 'xss-clean';
 
 import registerRoutes from './routes';
 import { addApiErrorHandler, addLogsErrorHandler } from './middlewares/error-handler';
@@ -26,6 +27,7 @@ class App {
   }
 
   private setMiddlewares(): void {
+    this.app.use(xss());
     this.app.use(cors());
     this.app.use(limiter);
     this.app.use(helmet());
