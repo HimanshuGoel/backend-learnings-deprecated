@@ -1,4 +1,5 @@
-import { Request, Response, Application, NextFunction } from 'express';
+import { Request, Response, Application, NextFunction, response } from 'express';
+import formidable from 'formidable';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { Validator, validate } from 'jsonschema';
 import qs from 'qs';
@@ -29,6 +30,7 @@ export class BooksRoute extends BaseApiRoute {
       .get('/books/detailed-search', this.getDetailedSearchedBooks)
       .get('/books/:bookId', this.getBookById)
       .post('/books/:bookId', this.createBookById)
+      .post('/upload', this.uploadBook)
       .put('/books/:bookId', this.updateBookById)
       .delete('/books/:bookId', this.deleteBookById);
   }
@@ -83,6 +85,55 @@ export class BooksRoute extends BaseApiRoute {
 
     v.addSchema(addressSchema, '/SimpleAddress');
     console.log(v.validate(p, schema1));
+  }
+
+  private async uploadBook(req: Request, res: Response, next: NextFunction) {
+    try {
+      const form = new formidable.IncomingForm({
+        uploadDir: __dirname,
+        keepExtensions: true,
+        maxFieldsSize: 5 * 1024 * 1024,
+        maxFields: 20,
+        encoding: 'utf-8',
+        multiples: true
+      });
+      form.parse(req, async (err, fields, files) => {
+        if (err) {
+          next(err);
+        } else {
+          const book = {
+            id: fields.id,
+            title: fields.title,
+            files: files
+          };
+          console.log(book);
+          res.status(StatusCodes.OK).json({
+            status: StatusCodes.OK,
+            statusText: ReasonPhrases.OK,
+            message: 'Book uploaded successfully',
+            data: { books, total: books.length }
+          });
+        }
+      });
+
+      form.on('progress', (bytesReceived, bytesExpected) => {
+        console.log(bytesReceived / bytesExpected);
+      });
+      form.on('aborted', () => {
+        console.log('Request aborted by the user');
+      });
+      form.on('error', (err) => {
+        console.log(err);
+        req.resume();
+      });
+
+      form.on('end', () => {
+        console.log('Done: request successfully received');
+        response.end('Success');
+      });
+    } catch (error) {
+      next(error);
+    }
   }
 
   private async getBooks(req: Request, res: Response, next: NextFunction) {
