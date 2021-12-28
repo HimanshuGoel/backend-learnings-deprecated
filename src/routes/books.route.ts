@@ -3,6 +3,7 @@ import formidable from 'formidable';
 import { StatusCodes, ReasonPhrases } from 'http-status-codes';
 import { Validator, validate } from 'jsonschema';
 import qs from 'qs';
+import axios from 'axios';
 
 import { BooksRepo } from '../repos/books.repo';
 
@@ -357,6 +358,23 @@ export class BooksRoute extends BaseApiRoute {
     } catch (error) {
       next(error);
     }
+  }
+
+  private async usingAxiosPackage() {
+    const url = 'https://jsonplaceholder.typicode.com/posts';
+    const data = await axios.get(url);
+    console.log(data);
+  }
+
+  private async usingAxiosWithPost() {
+    const url = 'https://jsonplaceholder.typicode.com/posts';
+    const data = {
+      title: 'foo',
+      body: 'bar',
+      userId: 1
+    };
+    const response = await axios.post(url, data);
+    console.log(response);
   }
 }
 
