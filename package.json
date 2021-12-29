@@ -62,7 +62,7 @@
     "jsonschema": "^1.4.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
-    "qs": "^6.10.1",
+    "qs": "^6.10.2",
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
