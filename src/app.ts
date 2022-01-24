@@ -3,8 +3,8 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import express from 'express';
 import bodyParser from 'body-parser';
-import path from 'path';
-import favicon from 'serve-favicon';
+// import path from 'path';
+// import favicon from 'serve-favicon';
 import rateLimit from 'express-rate-limit';
 import xss from 'xss-clean';
 
@@ -23,7 +23,7 @@ class App {
     this.app = express();
     this.setMiddlewares();
     this.setRoutes();
-    this.setFavicon();
+    // this.setFavicon();
   }
 
   private setMiddlewares(): void {
@@ -39,9 +39,9 @@ class App {
     this.app.use(bodyParser.urlencoded({ extended: false }));
   }
 
-  private setFavicon(): void {
-    this.app.use(favicon(path.join(__dirname, '../favicon.png')));
-  }
+  // private setFavicon(): void {
+  //   this.app.use(favicon(path.join(__dirname, '../favicon.png')));
+  // }
 
   private setRoutes(): void {
     this.app.get('/', this.basePathRoute);

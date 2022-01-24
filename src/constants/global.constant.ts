@@ -4,10 +4,10 @@ export const payGrades = {
   high: '3'
 } as const;
 
-type t = typeof payGrades;
+// type t = typeof payGrades;
 
-type payGradeType = keyof t; // 'low' | 'average' | 'high'
-type payValueType = t[keyof t]; // '1' | '2' | '3'
+// type payGradeType = keyof t; // 'low' | 'average' | 'high'
+// type payValueType = t[keyof t]; // '1' | '2' | '3'
 
 export const TechStaffPayGrades = {
   low: 'T1',
@@ -21,8 +21,8 @@ export const AdminStaffPayGrades = {
   high: 'A3'
 } as const;
 
-type allPayGrades = typeof TechStaffPayGrades | typeof AdminStaffPayGrades;
-type allPayValues = allPayGrades[keyof allPayGrades]; // "T1" | "T2" | "T3" | "A1" | "A2" | "A3"
+// type allPayGrades = typeof TechStaffPayGrades | typeof AdminStaffPayGrades;
+// type allPayValues = allPayGrades[keyof allPayGrades]; // "T1" | "T2" | "T3" | "A1" | "A2" | "A3"
 
 export const CREATE_BOOK = 'UPDATE_BOOK';
 export const READ_BOOK = 'READ_BOOK';
