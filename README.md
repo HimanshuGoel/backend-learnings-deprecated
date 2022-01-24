@@ -50,7 +50,7 @@ This project contains a `docker-compose.yml` which contains configurations for [
 
 ## Best Practices
 
-- `[To Be Created]`
+Please find the [Best Practices](./docs/best-practices.md) related documents.
 
 ## Get In Touch
 

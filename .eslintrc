@@ -19,23 +19,23 @@
     "semi": ["error", "always"],
     "object-curly-spacing": ["error", "always"],
     "camelcase": "off",
+    "no-underscore-dangle": "off",
+    "no-null-keyword": true,
+    "no-shadow": "off",
+    "no-new": 0,
+    "quotes": [2, "single", { "avoidEscape": true }],
+    "class-methods-use-this": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": 1,
+    "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-inferrable-types": [
       "warn",
       {
         "ignoreParameters": true
       }
     ],
-    "no-underscore-dangle": "off",
-    "no-null-keyword": true,
-    "no-shadow": "off",
-    "no-new": 0,
-    "@typescript-eslint/no-shadow": ["error"],
-    "@typescript-eslint/no-unused-vars": "warn",
-    "quotes": [2, "single", { "avoidEscape": true }],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-    "class-methods-use-this": "off",
     "import/extensions": [
       "error",
       "ignorePackages",

@@ -1,11 +1,21 @@
 {
   "recommendations": [
-    "cssho.vscode-svgviewer",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "ms-azuretools.vscode-docker",
-    "pmneo.tsimporter",
+    "wesbos.theme-cobalt2",
     "streetsidesoftware.code-spell-checker",
-    "WallabyJs.wallaby-vscode"
+    "dbaeumer.vscode-eslint",
+    "pomber.git-file-history",
+    "github.copilot",
+    "eamodio.gitlens",
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+    "christian-kohler.npm-intellisense",
+    "christian-kohler.path-intellisense",
+    "esbenp.prettier-vscode",
+    "alefragnani.project-manager",
+    "rangav.vscode-thunder-client",
+    "mike-co.import-sorter",
+    "pmneo.tsimporter",
+    "vscode-icons-team.vscode-icons",
+    "wallabyjs.wallaby-vscode"
   ]
 }
