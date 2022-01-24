@@ -11,32 +11,33 @@ export class BooksRepo {
 
   static async getBooksById(bookId: string) {
     const data = await fs.readFile(FILE_NAME, 'utf8');
-    let books = JSON.parse(data.toString());
-    const book = books.filter((book: { id: string; name: string }) => book.id === bookId);
-    return book;
+    const books = JSON.parse(data.toString());
+    const bookById = books.filter((book: { id: string; name: string }) => book.id === bookId);
+    return bookById;
   }
 
   static async update(updatedBook: any) {
     const data = await fs.readFile(FILE_NAME, 'utf8');
-    let book = JSON.parse(data.toString()).find((book: any) => book.id === updatedBook.id);
-    if (book) {
+    const bookById = JSON.parse(data.toString()).find((book: any) => book.id === updatedBook.id);
+    if (bookById) {
       // This approach will also works for PATCH method
-      Object.assign(book, updatedBook);
+      Object.assign(bookById, updatedBook);
     }
-    return book;
+    return bookById;
   }
 
   static async create(newBook: any) {
+    const bookClone = newBook;
     const data = await fs.readFile(FILE_NAME, 'utf8');
-    newBook.id = shortid.generate();
+    bookClone.id = shortid.generate();
     const books = JSON.parse(data.toString());
-    books.push(newBook);
+    books.push(bookClone);
     return books;
   }
 
   static async delete(id: string) {
     const data = await fs.readFile(FILE_NAME, 'utf8');
-    let index = JSON.parse(data.toString()).findIndex((p: any) => p.id === id);
+    const index = JSON.parse(data.toString()).findIndex((p: any) => p.id === id);
     if (index > -1) {
       JSON.parse(data.toString()).splice(index, 1);
     }

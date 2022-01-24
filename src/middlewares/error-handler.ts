@@ -1,6 +1,6 @@
 import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import { Request, Response, NextFunction } from 'express';
 
-import express from 'express';
 import util from 'util';
 
 import { LogsRepo } from '../repos/logs.repo';
@@ -9,9 +9,9 @@ import Logger from '../utilities/logger.utility';
 
 const addApiErrorHandler = (
   err: ApiError,
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ): void => {
   if (err) {
     const status: number = err.status || StatusCodes.INTERNAL_SERVER_ERROR;
@@ -41,11 +41,11 @@ const addApiErrorHandler = (
 
 const addLogsErrorHandler = (
   err: ApiError,
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
+  req: Request,
+  res: Response,
+  next: NextFunction
 ): void => {
-  let errorObject = {
+  const errorObject = {
     status: 500,
     statusText: 'Internal Server Error',
     message: err.message,
@@ -65,11 +65,13 @@ const addLogsErrorHandler = (
 
   LogsRepo.write(
     errorObject,
-    function (data: any) {
+    (data: any) => {
+      // eslint-disable-next-line no-console
       console.log(data);
     },
-    function (err: Error) {
-      console.error(err);
+    (error: Error) => {
+      // eslint-disable-next-line no-console
+      console.error(error);
     }
   );
   next(err);

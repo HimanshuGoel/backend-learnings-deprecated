@@ -6,7 +6,7 @@ import process from 'process';
 
 import { version } from '../../package.json';
 
-import BaseApiRoute from './base-api.route';
+import { BaseApiRoute } from './base-api.route';
 import ApiError from '../abstractions/api-error';
 
 export class HealthRoute extends BaseApiRoute {

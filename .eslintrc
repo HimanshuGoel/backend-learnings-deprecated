@@ -20,15 +20,16 @@
     "object-curly-spacing": ["error", "always"],
     "camelcase": "off",
     "no-underscore-dangle": "off",
-    "no-null-keyword": true,
+    "no-null-keyword": 0,
     "no-shadow": "off",
+    "prefer-template": "off",
     "no-new": 0,
     "quotes": [2, "single", { "avoidEscape": true }],
     "class-methods-use-this": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-explicit-any": 1,
+    "@typescript-eslint/no-explicit-any": 0,
     "@typescript-eslint/no-shadow": ["error"],
-    "@typescript-eslint/no-unused-vars": "warn",
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-inferrable-types": [
       "warn",
       {
@@ -36,6 +37,7 @@
       }
     ],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/prefer-default-export": 0,
     "import/extensions": [
       "error",
       "ignorePackages",

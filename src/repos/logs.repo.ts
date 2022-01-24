@@ -8,7 +8,7 @@ export class LogsRepo {
     toWrite += 'Date/Time: ' + new Date().toLocaleDateString() + '\r\n';
     toWrite += 'Exception Info: ' + JSON.stringify(data) + '\r\n';
     toWrite += '*'.repeat(80) + '\r\n';
-    fs.writeFile(FILE_NAME, toWrite, function (err) {
+    fs.writeFile(FILE_NAME, toWrite, (err) => {
       if (err) {
         reject(err);
       } else {
