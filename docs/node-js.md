@@ -271,3 +271,5 @@
     ```
 
 31. We should group our folder based on feature not types. It can also contains `config` and `utils` folder.
+
+32. To debug the code we can use `util.inspect(object, showHidden=false, depth=2, colorize=true);` method. It returns a string representation of an object.

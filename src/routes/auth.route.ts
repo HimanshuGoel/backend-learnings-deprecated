@@ -86,8 +86,8 @@ export class AuthRoute extends BaseApiRoute {
     return jwt.sign({}, process.env.SECRET as jwt.Secret, options as jwt.SignOptions);
   }
 
-  private getUsernameFromToken(token: string) {
-    const decoded = jwt.decode(token);
-    return decoded!.sub;
-  }
+  // private getUsernameFromToken(token: string) {
+  //   const decoded = jwt.decode(token);
+  //   return decoded!.sub;
+  // }
 }

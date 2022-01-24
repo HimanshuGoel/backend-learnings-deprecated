@@ -1,6 +1,6 @@
 import url from 'url';
 
-const headerCheck =  (whitelist: string) {
+const headerCheck = (whitelist: string) => {
   return function (req: any, res: any, next: any) {
     var method = req.method;
     if (method === 'GET' || method === 'HEAD' || method === 'OPTIONS') {
@@ -37,6 +37,5 @@ const headerCheck =  (whitelist: string) {
     return parsedUrl.protocol + '//' + parsedUrl.host;
   }
 };
-
 
 export { headerCheck };

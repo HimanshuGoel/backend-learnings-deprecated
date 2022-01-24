@@ -14,7 +14,7 @@ This will also serve as a playground for working upon different proof-of-concept
 ## Running Development Mode
 
 - Install the dependencies `npm install`
-- Start the server `npm run dev`
+- Start the server `npm run start`
 
 ## Running Production Mode
 
